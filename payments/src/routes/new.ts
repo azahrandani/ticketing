@@ -44,7 +44,7 @@ router.post(
             source: token,
         });
 
-        res.status(200).send({success: true});
+        res.status(201).send({success: true});
     }
 );
 
