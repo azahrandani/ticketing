@@ -5,6 +5,8 @@ import cookieSession from 'cookie-session';
 
 import { errorHandler, NotFoundError, currentUser } from '@azahrandani/common';
 
+import { createChargeRouter } from './routes/new';
+
 const app = express();
 
 // make express aware that it is behind an nginx proxy
@@ -19,6 +21,8 @@ app.use(
     })
 );
 app.use(currentUser);
+
+app.use(createChargeRouter);
 
 app.get('*', async (req, res) => {
     throw new NotFoundError();
