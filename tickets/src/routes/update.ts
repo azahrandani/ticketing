@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
 
-import { requireAuth, validateRequest, NotAuthorizedError, NotFoundError } from '@azahrandani/common';
+import { requireAuth, validateRequest, BadRequestError, NotAuthorizedError, NotFoundError } from '@azahrandani/common';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
 
@@ -27,6 +27,11 @@ router.put(
         const ticket = await Ticket.findById(req.params.id);
         if (!ticket) {
             throw new NotFoundError();
+        }
+
+        // check if ticket is allowed to be updated
+        if (ticket.orderId) {
+            throw new BadRequestError('Ticket is currently reserved. Can not edit.');
         }
 
         if (ticket.userId !== req.currentUser!.id) {
