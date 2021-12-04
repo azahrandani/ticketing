@@ -28,6 +28,7 @@ build:
       context: tickets
       docker:
         dockerfile: Dockerfile
+        noCache: true
       sync:
         manual:
           - src: 'src/**/*.ts'
@@ -36,6 +37,16 @@ build:
       context: orders
       docker:
         dockerfile: Dockerfile
+        noCache: true
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: azahrasrlabs/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+        noCache: true
       sync:
         manual:
           - src: 'src/**/*.ts'
