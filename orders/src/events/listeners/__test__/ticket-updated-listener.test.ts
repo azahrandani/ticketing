@@ -4,7 +4,6 @@ import { TicketUpdatedEvent } from "@azahrandani/common";
 import { TicketUpdatedListener } from "../ticket-updated-listener";
 import { natsWrapper } from "../../../nats-wrapper";
 import { Ticket } from '../../../models/ticket';
-import { TicketCreatedListener } from '../ticket-created-listener';
 
 const setup = async () => {
     // create instance of listener
@@ -37,7 +36,7 @@ const setup = async () => {
 };
 
 it('finds, updates, and saves a ticket', async () => {
-    const { listener, ticket, data, msg } = await setup();
+    const { listener, data, msg } = await setup();
 
     // call onMessage function with the data + message object
     await listener.onMessage(data, msg);
@@ -59,4 +58,17 @@ it('acks the message', async () => {
 
     // write assertions to make sure ack function is called
     expect(msg.ack).toHaveBeenCalled();
+});
+
+it('does not ack the message if the received event is not orderly', async () => {
+    const { listener, data, msg } = await setup();
+
+    // override the data version to cause the error
+    data.version = 10;
+
+    try {
+        await listener.onMessage(data, msg);
+    } catch (err) {}
+
+    expect(msg.ack).not.toHaveBeenCalled();    
 });
