@@ -12,6 +12,7 @@ build:
       context: auth
       docker:
         dockerfile: Dockerfile
+        noCache: true
       sync:
         manual:
           - src: 'src/**/*.ts'
@@ -20,6 +21,7 @@ build:
       context: client
       docker:
         dockerfile: Dockerfile
+        noCache: true
       sync:
         manual:
           - src: '**/*.js'
@@ -28,6 +30,7 @@ build:
       context: tickets
       docker:
         dockerfile: Dockerfile
+        noCache: true
       sync:
         manual:
           - src: 'src/**/*.ts'
@@ -36,6 +39,7 @@ build:
       context: orders
       docker:
         dockerfile: Dockerfile
+        noCache: true
       sync:
         manual:
           - src: 'src/**/*.ts'
@@ -44,6 +48,7 @@ build:
       context: expiration
       docker:
         dockerfile: Dockerfile
+        noCache: true
       sync:
         manual:
           - src: 'src/**/*.ts'
