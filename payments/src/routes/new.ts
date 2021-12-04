@@ -5,6 +5,8 @@ import { Payment } from '../models/payment';
 import { stripe } from '../stripe';
 
 import { BadRequestError, NotAuthorizedError, NotFoundError, OrderStatus, requireAuth, validateRequest } from '@azahrandani/common';
+import { PaymentCreatedPublisher } from '../events/publishers/payment-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -49,7 +51,13 @@ router.post(
         });
         await payment.save();
 
-        res.status(201).send({success: true});
+        new PaymentCreatedPublisher(natsWrapper.client).publish({
+            id: payment.id,
+            orderId: order.id,
+            stripeId: payment.stripeId,
+        });
+
+        res.status(201).send({ id: payment.id });
     }
 );
 
