@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
 import { Order } from '../../models/order';
+import { Payment } from '../../models/payment';
 import { OrderStatus } from '@azahrandani/common';
 import { stripe } from '../../stripe';
 
@@ -97,4 +98,10 @@ it('returns a 201 with valid inputs', async () => {
 
     expect(expectedCharge).toBeDefined;
     expect(expectedCharge!.amount).toEqual(price * 100);
+
+    const payment = await Payment.findOne({
+        orderId: order.id,
+        stripeId: expectedCharge!.id,
+    });
+    expect(payment).not.toBeNull();
 });
