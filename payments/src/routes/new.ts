@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Order } from '../models/order';
 import { natsWrapper } from '../nats-wrapper';
+import { stripe } from '../stripe';
 
 import { BadRequestError, NotAuthorizedError, NotFoundError, OrderStatus, requireAuth, validateRequest } from '@azahrandani/common';
 
@@ -37,7 +38,11 @@ router.post(
             throw new BadRequestError('The order is already cancelled.');
         }
 
-        
+        await stripe.charges.create({
+            currency: 'sgd',
+            amount: order.price * 100,
+            source: token,
+        });
 
         res.status(200).send({success: true});
     }
