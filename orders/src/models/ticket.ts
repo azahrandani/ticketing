@@ -54,8 +54,15 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
     });
 };
 
-ticketSchema.set('versionKey', 'version');
-ticketSchema.plugin(updateIfCurrentPlugin);
+// ticketSchema.set('versionKey', 'version');
+// ticketSchema.plugin(updateIfCurrentPlugin);
+
+ticketSchema.pre('save', function () {
+    console.log('Pre save on orders');
+    this.$where = {
+        version: this.get('version') - 1
+    };
+});
 
 ticketSchema.methods.isReserved = async function () {
     const existingOrder = await Order.findOne({
