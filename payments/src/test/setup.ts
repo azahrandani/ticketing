@@ -9,6 +9,9 @@ declare global {
 
 jest.mock('../nats-wrapper');
 
+// to accommodate actually calling the stripe api
+process.env.STRIPE_KEY = 'sk_test_51K317dFWfZOD1YVn3mLfjxqzSnEyN39QKoGPebWf5qkbDWeTckO3VpO6k2q0Qe6FSJ55iuvyxyqHZNspH9PdbfQK00nJjREMUu';
+
 let mongo: any;
 beforeAll(async () => {
     process.env.JWT_KEY = 'someSecretPrivateKey';
@@ -28,8 +31,8 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-    await mongo.stop();
     await mongoose.connection.close();
+    await mongo.stop();
 });
 
 global.signin = (id?: string) => {
