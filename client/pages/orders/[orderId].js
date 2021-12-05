@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const OrderShow = ({ order }) => {
-    const [timeLeft, setTimeLeft] = useState('');
+    const [timeLeft, setTimeLeft] = useState(0);
 
     // like on mount function
     useEffect(() => {
@@ -18,9 +18,17 @@ const OrderShow = ({ order }) => {
         }
     }, []);
 
+    if (timeLeft < 0) {
+        return (
+            <div>
+                <h1>Sorry, order has expired.</h1>
+            </div>
+        )
+    }
+
     return (
         <div>
-            <h1>Order Show</h1>
+            <h1>Please make your payment</h1>
             <p>{ timeLeft } seconds until order expires</p>
         </div>
     )
