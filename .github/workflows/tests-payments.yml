@@ -1,4 +1,4 @@
-name: tests
+name: tests-payments
 
 on:
   pull_request
@@ -10,4 +10,4 @@ jobs:
     steps:
       # take all the code out of our project
       - uses: actions/checkout@v2
-      - run: cd auth && npm install && npm run test:ci
+      - run: cd payments && npm install && npm run test:ci
