@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const buildClient = ({ req }) => {
     const onServerEnvironment = typeof window === 'undefined';
-    console.log('ON BUILD CLIENT');
     if (onServerEnvironment) {
         console.log('### ON SERVER ENV');
         return axios.create({
