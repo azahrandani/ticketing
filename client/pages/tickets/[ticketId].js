@@ -1,3 +1,4 @@
+import Router from 'next/router';
 import useRequest from '../../hooks/use-request';
 
 const TicketShow = ({ ticket }) => {
@@ -10,6 +11,7 @@ const TicketShow = ({ ticket }) => {
         onSuccess: (order) => {
             console.log('### succcess submitting new order', ticket.id);
             console.log(order);
+            Router.push('/orders/[orderId]', `/orders/${order.id}`);
         }
     });
 
@@ -22,9 +24,9 @@ const TicketShow = ({ ticket }) => {
             <h1>{ ticket.title }</h1>
             <h3>Price: { ticket.price }</h3>
             { errors }
-            <buton onClick={orderTicket} className="btn btn-primary">
+            <button onClick={orderTicket} className="btn btn-primary">
                 Purchase
-            </buton>
+            </button>
         </div>
     );
 };
